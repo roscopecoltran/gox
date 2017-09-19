@@ -1,0 +1,6 @@
+hash: 62161b1447cf2cefdcff47bd1d3c7daf706ebbd534f14ac8d4bb4208745b09a2
+updated: 2017-09-19T13:02:42.776446881+02:00
+imports:
+- name: github.com/mitchellh/iochan
+  version: 87b45ffd0e9581375c491fef3d32130bb15c5bd7
+testImports: []

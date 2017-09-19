@@ -1,1 +1,90 @@
 gox
+
+### Go ###
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+_testmain.go
+
+*.test
+*.prof
+
+# Test coverage
+*.out
+
+### Shared ###
+# shared
+# shared/
+# shared/**
+
+### Dist ###
+dist/*
+dist/**
+
+### Vendor ###
+vendor
+vendor/
+vendor/**
+
+
+### App ###
+dist/*/gox-*
+dist/*/gox_*
+bin/gox*
+
+### Big Files and Archives ###
+*.gz
+*.tar.gz
+*.pickle
+*.txt
+*.csv
+
+## keep splitted archives (usually under 60Mb)
+!*.gz.*
+!*.zip.*
+!*.bz2.*
+!*.tar.gz.*
+
+### Config files ###
+# ignore production/local config files
+*.yaml
+*.json
+
+### Docker ###
+*-*.env
+.env
+
+!Dockerfile.*
+!dockerfile*
+!docker-compose*
+!crane.*
+
+# remove test or legacy config files/variables
+*.*-test*
+*.*-test*
+*.*-backup*
+*.*-bck*
+*.*-old*
+
+# skip from ignore any example config files
+!*.*-sample*
+!*.*-example*
+
+!core/gox.go
+!core/gox_osarch.go
