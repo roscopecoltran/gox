@@ -36,7 +36,7 @@ APP_VER				:= $(APP_VER)
 APP_VER_FILE 		:= $(shell git describe --always --long --dirty --tags)
 
 # golang
-GO_BUILD_LDFLAGS 	:= -a -ldflags="-X github.com/roscopecoltran/$(APP_NAME)/$(APP_PKG).$(APP_NAME_UCFIRST)Version=${APP_VER}"
+GO_BUILD_LDFLAGS 	:= -X github.com/roscopecoltran/$(APP_NAME)/core.$(APP_NAME_UCFIRST)Version=$(APP_VER_FILE)
 GO_BUILD_PREFIX		:= $(APP_DIST_DIR)/all/$(APP_NAME)
 GO_BUILD_URI		:= github.com/roscopecoltran/$(APP_NAME)
 GO_BUILD_VARS 		:= GOARCH=amd64 CGO_ENABLED=0
@@ -79,27 +79,33 @@ PKG_ADD_EXEC		:= $(shell which pkg_add)
 
 default: build
 
-install: build
-	go install
+#install: build
+#	go install
 
 build: check
 	go build
 
 dist: macos linux windows
 
+install: golang-package-deps glide-install
+	# echo "	go install -ldflags=\"$(GO_BUILD_LDFLAGS)\""
+	@go install -v -ldflags="$(GO_BUILD_LDFLAGS)"
+	@gox --version
+
 darwin:
 	clear
 	echo ""
 	rm -f $(APP_NAME)
 	# gox -verbose -os="darwin" -arch="amd64" -output="{{.Dir}}" $(glide novendor)
-	gox -verbose -os="darwin" -arch="amd64" -output="{{.Dir}}" $(glide novendor)
+	echo "gox -verbose -ldflags=\"$(GO_BUILD_LDFLAGS)\" -os=\"darwin\" -arch=\"amd64\" -output=\"{{.Dir}}\" $(glide novendor)"
+	gox -verbose -ldflags="$(GO_BUILD_LDFLAGS)" -os="darwin" -arch="amd64" -output="{{.Dir}}" $(glide novendor)
 	echo ""
 
 darwin-tests:
 	clear
 	echo ""
 	rm -f $(APP_NAME)
-	gox -verbose -os="darwin" -arch="amd64" -output="{{.Dir}}" $(glide novendor)
+	gox -verbose -ldflags="$(GO_BUILD_LDFLAGS)" -os="darwin" -arch="amd64" -output="{{.Dir}}" $(glide novendor)
 	echo ""
 
 # darwin:
@@ -122,7 +128,7 @@ glide-create: ## create the list of used dependencies in this golang project, vi
 	@if [ ! -f $(CURDIR)/glide.yaml ]; then glide create --non-interactive ; fi
 
 glide-install: ## install app/pkg dependencies via glide utility
-	@if [ -f $(CURDIR)/glide.yaml ]; then glide install --strip-vendor ; fi
+	@if [ ! -f $(CURDIR)/glide.lock ]; then glide install --strip-vendor ; else glide update --strip-vendor ; fi
 
 golang-install-deps: golang-package-deps golang-embedding-deps golang-test-deps ## install global golang pkgs/deps
 

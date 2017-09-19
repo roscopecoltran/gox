@@ -10,7 +10,10 @@ To install Gox, please use `go get`. We tag versions so feel free to
 checkout that tag and compile.
 
 ```
-$ go get github.com/mitchellh/gox
+$ go get -v -d github.com/mitchellh/gox
+  cd $GOPATH/src/github.com/mitchellh/gox
+  make darwin OR make linux # for local dev
+  make install              # install package
 ...
 $ gox -h
 ...

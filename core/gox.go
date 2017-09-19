@@ -26,13 +26,15 @@ func RealMain() int {
 	var tags string
 	var verbose bool
 	var flagGcflags string
-	var flagCgo, flagRebuild, flagListOSArch bool
+	var flagCgo, flagRebuild, flagListOSArch, flagVersion bool
 	var flagGoCmd string
 	flags := flag.NewFlagSet("gox", flag.ExitOnError)
 	flags.Usage = func() { printUsage() }
+
 	flags.Var(platformFlag.ArchFlagValue(), "arch", "arch to build for or skip")
 	flags.Var(platformFlag.OSArchFlagValue(), "osarch", "os/arch pairs to build for or skip")
 	flags.Var(platformFlag.OSFlagValue(), "os", "os to build for or skip")
+
 	flags.StringVar(&ldflags, "ldflags", "", "linker flags")
 	flags.StringVar(&tags, "tags", "", "go build tags")
 	flags.StringVar(&outputTpl, "output", "{{.Dir}}_{{.OS}}_{{.Arch}}", "output path")
@@ -44,6 +46,7 @@ func RealMain() int {
 	flags.BoolVar(&flagListOSArch, "osarch-list", false, "")
 	flags.StringVar(&flagGcflags, "gcflags", "", "")
 	flags.StringVar(&flagGoCmd, "gocmd", "go", "")
+	flags.BoolVar(&flagVersion, "version", false, "")
 	if err := flags.Parse(os.Args[1:]); err != nil {
 		flags.Usage()
 		return 1
@@ -82,6 +85,10 @@ func RealMain() int {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error reading Go version: %s", err)
 		return 1
+	}
+
+	if flagVersion {
+		return PrintVersion()
 	}
 
 	if flagListOSArch {
