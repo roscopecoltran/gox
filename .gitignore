@@ -65,6 +65,7 @@ bin/gox*
 # ignore production/local config files
 *.yaml
 *.json
+!glide.*
 
 ### Docker ###
 *-*.env
